@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>故往风情 | 班级相册</title>
+    <link rel="icon" href="favicon.ico"/>
+    <link rel="stylesheet" href="assets/style.css"/>
+	<link rel="stylesheet" href="assets/index.css"/>
+</head>
+<body>
+    <button class="theme-switch" id="themeBtn"></button>
+    <nav>
+        <a href="index.html">首页·忆起故往风情</a>
+        <a href="albums.html">相册·共览一时念想</a>
+        <a href="eyes.html">视角·望见ta的眼睛</a>
+    </nav>
+    <section class="hero-top">
+        <img id="randomBgImg" alt="首页背景">
+        <div class="hero-mask"></div>
+        <div class="hero-info-box">
+            <p class="info-date"></p>
+            <p class="info-place"></p>
+            <p class="info-slogan"></p>
+        </div>
+    </section>
+    <section class="archive-section">
+        <h2 class="archive-title">时光存档</h2>
+        <p class="archive-desc">每一本相册，都是一段共同的岁月。</p>
+        <div class="divider-line"></div>
+        <div class="today-memory">
+            <h4 style="margin-bottom:1.5rem;color:var(--text-secondary)">今日忆起</h4>
+            <div class="album-card-wrap" id="albumWrap">
+                <a class="album-card-item" id="card1" target="_blank">
+                    <div class="album-bg" id="bg1"></div>
+                    <div class="album-overlay">
+                        <div class="album-name" id="name1"></div>
+                        <div class="album-meta-row" id="meta1"></div>
+                        <div class="album-location" id="loc1"></div>
+                    </div>
+                </a>
+                <a class="album-card-item" id="card2" target="_blank">
+                    <div class="album-bg" id="bg2"></div>
+                    <div class="album-overlay">
+                        <div class="album-name" id="name2"></div>
+                        <div class="album-meta-row" id="meta2"></div>
+                        <div class="album-location" id="loc2"></div>
+                    </div>
+                </a>
+                <a class="album-card-item" id="card3" target="_blank">
+                    <div class="album-bg" id="bg3"></div>
+                    <div class="album-overlay">
+                        <div class="album-name" id="name3"></div>
+                        <div class="album-meta-row" id="meta3"></div>
+                        <div class="album-location" id="loc3"></div>
+                    </div>
+                </a>
+                <a class="album-card-item" href="albums.html" id="cardJ"> <span>更多相册 →</span> </a>
+            </div>
+        </div>
+        <div class="divider-line"></div>
+    </section>
+    <section class="thought-section">
+        <p class="thought-text">"原来最后一节课，<br>老师没有讲题。"</p>
+    </section>
+    <section class="eye-section">
+        <h3 class="eye-title">望见ta的眼睛</h3>
+        <p class="eye-desc">每一张照片，都有一个记录者；<br>按下快门，停下时间。<br><br>带来什么视角？</p>
+        <a href="eyes.html" class="eye-btn">进入</a>
+    </section>
+	<footer class="album-footer">
+	    <h5 class="footer-main-title">故往风情</h2>
+	    <p class="footer-tagline">一册青春，共览一时念想</p>
+	    <div class="footer-entrance">
+	        <a href="http://ry24-1.kh8.cn" class="back-main-link" target="_blank">回到山河之间 http://ry24-1.kh8.cn</a>
+	    </div>
+	    <div class="footer-copyright"> © 2026 故往风情 <br> Powered by Ry24-1 </div>
+	</footer>
+    <script src="assets/script.js"></script>
+    <script src="assets/index.js"></script>
+</body>
+</html>

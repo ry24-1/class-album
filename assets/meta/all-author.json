@@ -1,0 +1,15 @@
+{
+    "author": [
+        {"id":"X","name":"未知","dev":["UnKnow"]},
+		{"id":"A","name":"秦学文","dev":["FujiFilm S4050","FDG-AL00","Nikon D3100","DSCM"]},
+		{"id":"B","name":"李奕洋","dev":["","Canon EOS 7D"]},
+		{"id":"C","name":"赵轩萱","dev":["","Dji Pocket 3"]},
+		{"id":"D","name":"吴昕彤","dev":["Sony ZV-1M2"]},
+		{"id":"E","name":"郑浩冉","dev":["Sony HDR-PJ200E"]},
+		{"id":"F","name":"宋任玲","dev":[""]},
+		{"id":"G","name":"陈胡彦晞","dev":[""]},
+		{"id":"H","name":"曹予墨","dev":[""]},
+		{"id":"I","name":"邓润芊","dev":[""]}
+    ]
+}
+//DSCM:Drone Sd-card Camra Module
