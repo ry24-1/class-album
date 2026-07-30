@@ -18,7 +18,7 @@ document.querySelector('.info-date').innerText = currentText.date;
 document.querySelector('.info-place').innerText = currentText.place;
 document.querySelector('.info-slogan').innerText = currentText.slogan;
 
-fetch("album/all-albums.json")
+fetch("assets/meta/all-albums.json")
 .then(res => res.json())
 .then(data => {
 const albums = data.albums;
@@ -28,19 +28,19 @@ do { idx2 = Math.floor(Math.random() * albums.length); } while (idx2 === idx1 ||
 const d1 = albums[0], d2 = albums[idx1], d3 = albums[idx2];
 document.getElementById('card1').href = `album.html?id=${d1.id}`;
 	document.getElementById('bg1').style.backgroundImage = `url(album/${d1.id}.webp)`;
-		document.getElementById('name1').textContent = d1.name;
-			document.getElementById('meta1').textContent = `图片${d1.ph}张 | ${d1.date}`;
-				document.getElementById('loc1').textContent = d1.loc;
+		document.getElementById('name1').textContent = d1.na;
+			document.getElementById('meta1').textContent = `图片${d1.ph}张 | ${d1.da}`;
+				document.getElementById('loc1').textContent = d1.lc;
 document.getElementById('card2').href = `album.html?id=${d2.id}`;
 	document.getElementById('bg2').style.backgroundImage = `url(album/${d2.id}.webp)`;
-		document.getElementById('name2').textContent = d2.name;
-			document.getElementById('meta2').textContent = `图片${d2.ph}张 · 视频${d2.vd}条 | ${d2.date}`;
-				document.getElementById('loc2').textContent = d2.loc;
+		document.getElementById('name2').textContent = d2.na;
+			document.getElementById('meta2').textContent = `图片${d2.ph}张 · 视频${d2.vd}条 | ${d2.da}`;
+				document.getElementById('loc2').textContent = d2.lc;
 document.getElementById('card3').href = `album.html?id=${d3.id}`;
 	document.getElementById('bg3').style.backgroundImage = `url(album/${d3.id}.webp)`;
-		document.getElementById('name3').textContent = d3.name;
-			document.getElementById('meta3').textContent = `图片${d3.ph}张 · 视频${d3.vd}条 | ${d3.date}`;
-				document.getElementById('loc3').textContent = d3.loc;
+		document.getElementById('name3').textContent = d3.na;
+			document.getElementById('meta3').textContent = `图片${d3.ph}张 · 视频${d3.vd}条 | ${d3.da}`;
+				document.getElementById('loc3').textContent = d3.lc;
 })
 .catch(err => {
 	console.error('相册JSON加载失败：', err);
