@@ -11,7 +11,7 @@ fetch('assets/meta/all-author.json')
         const sideClass = idx % 2 === 0 ? 'right-side' : 'left-side';
         const validDev = item.dev.filter(d => d && d.trim() !== '');
         const devText = validDev.length > 0 ? validDev.join('、') : '未填写设备';
-        const avatarHtml = `<img class="square-avatar" src="assets/avatar/${item.id}.webp" alt="${item.name}" onerror="this.style.display='none'">`;
+        const avatarHtml = `<img class="square-avatar" src="assets/avatar/${item.id}.webp" alt="${item.name}">`;
         let lineMsgHtml = '';
         if (item.message?.trim()) { lineMsgHtml = `<div class="line"></div><p class="message">${item.message}</p>`; }
         const tpl = `
