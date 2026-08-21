@@ -11,7 +11,7 @@ fetch('assets/meta/all-author.json')
         const sideClass = idx % 2 === 0 ? 'right-side' : 'left-side';
         const validDev = item.dev.filter(d => d && d.trim() !== '');
         const devText = validDev.length > 0 ? validDev.join('、') : '未填写设备';
-        const avatarHtml = `<img class="square-avatar" src="assets/avatar/${item.id}.webp" alt="${item.name}">`;
+        const avatarHtml = `<img class="square-avatar" src="assets/avatar/${item.id}.webp" alt="${item.name}">`; //onerror="this.style.display='none'"
         let lineMsgHtml = '';
         if (item.message?.trim()) { lineMsgHtml = `<div class="line"></div><p class="message">${item.message}</p>`; }
         const tpl = `
@@ -28,7 +28,7 @@ fetch('assets/meta/all-author.json')
         wrap.innerHTML += tpl;
     });
 })
-//Drone Sd-card Camra Module
+//DSCM: Drone Sd-card Camra Module
 .catch(err => {
     console.error('档案加载异常：', err);
     document.getElementById('authorBox').innerHTML = '<p style="text-align:center;color:var(--text-secondary);padding:40px 0;">记录者档案加载失败</p>';

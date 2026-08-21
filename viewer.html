@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>故往风情 | 班级相册</title>
+    <link rel="icon" href="favicon.ico"/>
+    <link rel="stylesheet" href="assets/css/all-style.css"/>
+	<link rel="stylesheet" href="assets/css/viewer.css">
+</head>
+<body>
+    <nav>
+        <a href="index.html">首页·故往风情</a>
+        <a href="album.html">相册·一时念想</a>
+        <a href="eyes.html">视角·ta的眼睛</a>
+    </nav>
+    <div class="viewer-wrap">
+        <div class="viewer-main">
+            <div class="album-cover-box" id="coverBox">
+                <img id="albumCover" alt="相册封面">
+            </div>
+            <aside class="section-nav" id="sectionNav">
+                <h4>章节目录</h4>
+                <div class="nav-list" id="navList"></div>
+            </aside>
+            <div class="content-container" id="contentBox"></div>
+        </div>
+        <aside class="info-sidebar" id="infoSide">
+            <div class="info-block">
+                <h3 id="albumName">相册名称-Nan</h3>
+                <div class="info-row">
+                    <span class="label">图片 / 视频</span>
+                    <span id="mediaCount">Nan张图片 · Nan条视频</span>
+                </div>
+                <div class="info-row">
+                    <span class="label">拍摄时段：</span>
+                    <span id="albumDate">Nan</span>
+                </div>
+                <div class="info-row">
+                    <span class="label">拍摄地点：</span>
+                    <span id="albumLoc">Nan</span>
+                </div>
+                <div class="info-row desc">
+                    <span class="label">相册简介：</span>
+                    <p id="albumIntro"></p>
+                </div>
+                <div class="info-row">
+                    <span class="label">标签：</span>
+                    <div id="tagBox"></div>
+                </div>
+                <div class="info-row">
+                    <span class="label">拍摄者：</span>
+                    <div id="authorBox"></div>
+                </div>
+            </div>
+        </aside>
+    </div>
+    <div class="viewer-overlay" id="overlay">
+        <div class="viewer-ctrl-bar">
+            <button id="zoomOutBtn">缩小</button>
+            <button id="zoomResetBtn">重置</button>
+            <button id="zoomInBtn">放大</button>
+            <button id="downloadBtn">下载</button>
+        </div>
+        <button class="viewer-close" id="closeBtn">×</button>
+        <button class="viewer-prev" id="prevBtn">«</button>
+        <button class="viewer-next" id="nextBtn">»</button>
+        <div class="viewer-info-panel" id="infoPanel">
+            <div class="info-author"></div>
+            <div class="info-section"></div>
+            <div class="info-time"></div>
+            <div class="info-note"></div>
+        </div>
+        <div class="viewer-inner">
+            <div class="viewer-canvas-wrap">
+                <div class="viewer-pan-inner" id="panWrap">
+                    <img id="bigImg" alt="大图预览">
+                    <video id="bigVid" muted controls></video>
+                </div>
+            </div>
+        </div>
+    </div>
+    <footer class="album-footer">
+        <h5 class="footer-main-title">故往风情</h5>
+        <p class="footer-tagline">一册青春，共览一时念想</p>
+        <div class="footer-entrance">
+            <button class="theme-switch" id="themeBtn"></button><br><br>
+            <a href="http://ry24-1.kh8.cn" class="back-main-link" target="_blank">回到山河之间 http://ry24-1.kh8.cn</a>
+        </div>
+        <div class="footer-copyright"> © 2026 故往风情 <br> Powered by Ry24-1 </div>
+    </footer>
+    <script src="assets/js/all-script.js"></script>
+    <script src="assets/js/viewer.js"></script>
+</body>
+</html>

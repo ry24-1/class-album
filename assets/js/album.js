@@ -56,7 +56,7 @@ function renderAlbumList(filterKeyword = "") {
       yearInner.appendChild(termTitle);
       termList.forEach(item => {
         const introHtml = (item.io && item.io.trim() !== "") ? `<p class="item-intro">${item.io}</p>` : "";
-        yearInner.innerHTML += `<a href="album.html?album=${item.id}" class="album-item"><div class="item-cover"><img src="album/${item.id}.webp" alt="${item.na}" loading="lazy"></div><div class="item-info"><h4 class="item-name">${item.na}</h4><p class="item-date">${item.da}</p><p class="item-meta">照片${item.ph}张 · 视频${item.vd}条 | ${item.lc}</p>${introHtml}</div></a>`;
+        yearInner.innerHTML += `<a href="viewer.html?id=${item.id}" class="album-item"><div class="item-cover"><img src="assets/cover/${item.id}.webp" alt="${item.na}" loading="lazy"></div><div class="item-info"><h4 class="item-name">${item.na}</h4><p class="item-date">${item.da}</p><p class="item-meta">照片${item.ph}张 · 视频${item.vd}条 | ${item.lc}</p>${introHtml}</div></a>`;
       });
     });
     timeLineBox.appendChild(yearBlock);
