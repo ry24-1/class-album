@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>全景查看器</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pannellum@2.5.6/build/pannellum.css"/>
+<script src="https://cdn.jsdelivr.net/npm/pannellum@2.5.6/build/pannellum.js"></script>
+<style>
+*{margin:0;padding:0}
+html,body{width:100%;height:100%;overflow:hidden;background:#000}
+#panorama{width:100%;height:100vh}
+/* 按钮右上角 */
+.btns{position:fixed;top:15px;right:15px;z-index:9999}
+.btn{padding:6px 12px;margin-left:8px;background:rgba(0,0,0,0.5);color:#fff;border:1px solid #fff;border-radius:4px;cursor:pointer}
+.loading{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);color:#fff;font-size:16px}
+</style>
+</head>
+<body>
+<div id="panorama"></div>
+<div class="btns">
+  <button class="btn" id="rotateBtn">开启自动旋转</button>
+  <button class="btn" id="downloadBtn">下载全景图</button>
+</div>
+<div class="loading" id="tip">正在加载全景图...</div>
+
+<script>
+function getUrlParam(name){
+    const reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+    const r = window.location.search.substr(1).match(reg);
+    return r?decodeURIComponent(r[2]):null;
+}
+// 生成8位随机小写字母+数字
+function getRandomName(){
+    const chars = 'abcdefghijklmnopqrstuvwxyz0123456789';
+    let name = '';
+    for(let i=0;i<8;i++){
+        name += chars.charAt(Math.floor(Math.random()*chars.length));
+    }
+    return name;
+}
+
+const imgSrc = getUrlParam("src");
+const tip = document.getElementById('tip');
+const rotateBtn = document.getElementById('rotateBtn');
+const downloadBtn = document.getElementById('downloadBtn');
+
+let viewer = null;
+let isAutoRotate = false;
+
+if(imgSrc){
+    viewer = pannellum.viewer('panorama', {
+        type: 'equirectangular',
+        panorama: imgSrc,
+        autoLoad: true,
+        showControls: true,
+        compass: true,
+        autoRotate: 0
+    });
+    setTimeout(()=>tip.style.display='none',1500);
+
+    // 切换自动旋转
+    rotateBtn.onclick = ()=>{
+        isAutoRotate = !isAutoRotate;
+        if(isAutoRotate){
+            viewer.startAutoRotate(-5);
+            rotateBtn.innerText = "关闭自动旋转";
+        }else{
+            viewer.stopAutoRotate();
+            rotateBtn.innerText = "开启自动旋转";
+        }
+    };
+
+    // 下载：8位随机名
+    downloadBtn.onclick = ()=>{
+        const a = document.createElement('a');
+        a.href = imgSrc;
+        a.download = getRandomName() + ".jpg";
+        a.click();
+    };
+
+}else{
+    tip.innerText = "请传入全景图地址，格式：?src=xxx.jpg";
+}
+</script>
+</body>
+</html>
