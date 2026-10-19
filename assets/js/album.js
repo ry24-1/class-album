@@ -2,7 +2,7 @@ let originAlbumList = [];
 let globalTagList = [];
 const timeLineBox = document.getElementById("timeLineBox");
 const searchInput = document.getElementById("albumSearchInput");
-const tagItems = document.querySelectorAll(".tag-item");
+
 function getYearAndMonth(dateStr) {
   if (!dateStr || typeof dateStr !== 'string' || dateStr.trim() === '') return { year: 2099, month: 1 };
   const startPart = dateStr.split("~")[0];
@@ -11,6 +11,7 @@ function getYearAndMonth(dateStr) {
   const month = parseInt(arr[1]) || 1;
   return { year, month };
 }
+
 function renderAlbumList(filterKeyword = "") {
   let renderList = [...originAlbumList];
   const kw = filterKeyword.trim().toLowerCase();
@@ -62,22 +63,63 @@ function renderAlbumList(filterKeyword = "") {
     timeLineBox.appendChild(yearBlock);
   });
 }
-Promise.all([fetch("assets/meta/tag-data.json").then(res => res.json()), fetch("assets/meta/all-albums.json").then(res => res.json())])
+
+Promise.all([
+  fetch("assets/meta/tag-data.json").then(res => res.json()),
+  fetch("assets/meta/all-albums.json").then(res => res.json())
+])
 .then(([tagData, albumData]) => {
   globalTagList = tagData.tags;
   originAlbumList = albumData.albums;
   renderAlbumList();
+  const commonWrap = document.querySelector("#common");
+  const othersWrap = document.querySelector("#others");
+  const commonTagArr = globalTagList.slice(0, 3);
+  const otherTagArr = globalTagList.slice(3);
+  commonWrap.innerHTML = `<span class="tag-label">常用标签：</span>`;
+  commonTagArr.forEach(tag => {
+    const span = document.createElement("span");
+    span.className = "tag-item";
+    span.dataset.tag = tag.name;
+    span.textContent = tag.name;
+    commonWrap.appendChild(span);
+  });
+  const moreBtn = document.createElement("span");
+  moreBtn.className = "tag-item";
+  moreBtn.style = "border: 0;";
+  moreBtn.dataset.tag = "#more#";
+  moreBtn.textContent = "更多";
+  commonWrap.appendChild(moreBtn);
+  othersWrap.innerHTML = "";
+  otherTagArr.forEach(tag => {
+    const span = document.createElement("span");
+    span.className = "tag-item";
+    span.dataset.tag = tag.name;
+    span.textContent = tag.name;
+    othersWrap.appendChild(span);
+  });
+  document.querySelectorAll(".tag-item").forEach(tag => {
+    tag.addEventListener("click", function () {
+      const tagText = this.dataset.tag;
+      if(tagText === "#more#") {
+        const tagOthers = document.getElementById("others");
+        if(tagOthers.style.display === "flex"){
+          tagOthers.style.display = "none";
+          this.textContent = "更多";
+        }else{
+          tagOthers.style.display = "flex";
+          this.textContent = "收起";
+        }
+      } else {
+        searchInput.value = tagText;
+        renderAlbumList(tagText);
+        searchInput.focus();
+      }
+    });
+  });
 })
 .catch(err => {
   console.error("加载错误：", err);
   timeLineBox.innerHTML = `<p style="text-align:center;color:var(--text-secondary);opacity:0.5;">相册内容加载异常</p>`;
 });
 searchInput.addEventListener("input", e => renderAlbumList(e.target.value));
-tagItems.forEach(tag => {
-  tag.addEventListener("click", function () {
-    const tagText = this.dataset.tag;
-    searchInput.value = tagText;
-    renderAlbumList(tagText);
-    searchInput.focus();
-  });
-});
