@@ -21,7 +21,7 @@
 .search-input{width:100%;box-sizing:border-box;background:transparent;border:1px solid rgba(130,130,130,0.22);border-radius:2px;padding:14px 18px;font-size:15px;color:var(--text-primary);outline:none;transition:border-color 0.25s;}
 .search-input:focus{border-color:var(--text-secondary);}
 .search-input::placeholder{color:var(--text-secondary);opacity:0.5;}
-.hot-tags{margin-top:16px;display:flex;flex-wrap:wrap;gap:10px;align-items:center;}
+.tags{margin-top:16px;display:flex;flex-wrap:wrap;gap:10px;align-items:center;}
 .tag-label{font-size:13px;color:var(--text-secondary);opacity:0.6;}
 .tag-item{font-size:13px;padding:4px 10px;border:1px solid rgba(130,130,130,0.18);color:var(--text-secondary);cursor:pointer;transition:all 0.2s;}
 .tag-item:hover{border-color:var(--text-primary);color:var(--text-primary);}

@@ -31,31 +31,33 @@ let albumSections = [];
 let authorList = [];
 let tagData = null;
 let isVideoActive = false;
-function updateTransform() {panWrap.style.transform = `translate(${offsetX}px,${offsetY}px) scale(${currentScale})`;}
+
+function updateTransform() { panWrap.style.transform = `translate(${offsetX}px,${offsetY}px) scale(${currentScale})`; }
 function resetZoom() {
 	currentScale = 1;
 	offsetX = 0;
 	offsetY = 0;
 	updateTransform();
-	canvasWrap.scrollTo(0,0);
+	canvasWrap.scrollTo(0, 0);
 }
+
 zoomInBtn.addEventListener('click', () => {
-	if(isVideoActive) return;
-	if(currentScale < 3) {
+	if (isVideoActive) return;
+	if (currentScale < 3) {
 		currentScale += 0.25;
 		updateTransform();
 	}
 })
 zoomOutBtn.addEventListener('click', () => {
-	if(isVideoActive) return;
-	if(currentScale > 0.5) {
+	if (isVideoActive) return;
+	if (currentScale > 0.5) {
 		currentScale -= 0.25;
 		updateTransform();
 	}
 })
 zoomResetBtn.addEventListener('click', resetZoom);
 canvasWrap.addEventListener('wheel', e => {
-	if(isVideoActive) return;
+	if (isVideoActive) return;
 	e.preventDefault();
 	const rect = canvasWrap.getBoundingClientRect();
 	const mouseX = e.clientX - rect.left;
@@ -69,20 +71,22 @@ canvasWrap.addEventListener('wheel', e => {
 	updateTransform();
 })
 panWrap.addEventListener('mousedown', e => {
-	if(isVideoActive) return;
+	if (isVideoActive) return;
 	isDragging = true;
 	dragStartX = e.clientX - offsetX;
 	dragStartY = e.clientY - offsetY;
 })
 document.addEventListener('mousemove', e => {
-	if(!isDragging) return;
+	if (!isDragging) return;
 	offsetX = e.clientX - dragStartX;
 	offsetY = e.clientY - dragStartY;
 	updateTransform();
 })
 document.addEventListener('mouseup', () => isDragging = false)
+
 downloadBtn.addEventListener('click', () => {
-	if(!currentMediaSrc) return;
+	if (!currentMediaSrc) return;
+	if (isVideoActive) return;
 	const a = document.createElement('a');
 	a.href = currentMediaSrc;
 	a.download = currentMediaSrc.split('/').pop();
@@ -90,36 +94,51 @@ downloadBtn.addEventListener('click', () => {
 	a.click();
 	a.remove();
 })
-function refreshNavButtonState(){
+
+function refreshNavButtonState() {
 	prevBtn.disabled = currentIndex <= 0;
 	nextBtn.disabled = currentIndex >= mediaList.length - 1;
 }
+
 function openViewer(src, type, meta, idx) {
 	currentMediaSrc = src;
 	currentMediaMeta = meta;
 	currentIndex = idx;
-	isVideoActive = (type === 'mp4');
+	isVideoActive = (type === 'm3u8');
 	resetZoom();
 	bigImg.style.display = 'none';
 	bigVid.style.display = 'none';
 	bigVid.pause();
 	bigVid.src = '';
 	bigImg.src = '';
-	if (type === 'mp4') {
-		bigVid.src = src, bigVid.load();
-		bigVid.muted = false, bigVid.volume = 1;
+
+	if (type === 'm3u8') {
 		bigVid.style.display = 'block';
-	} else { bigImg.src = src, bigImg.style.display = 'block'; }
-	if(currentMediaMeta){
+		if (Hls.isSupported()) {
+			const hls = new Hls({ enableWorker: true });
+			hls.loadSource(src);
+			hls.attachMedia(bigVid);
+			bigVid.hlsInstance = hls;
+		} else if (bigVid.canPlayType('application/vnd.apple.mpegurl')) {
+			bigVid.src = src;
+		}
+		bigVid.muted = false;
+		bigVid.volume = 1;
+	} else {
+		bigImg.src = src;
+		bigImg.style.display = 'block';
+	}
+
+	if (currentMediaMeta) {
 		const authObj = authorList.find(a => String(a.id) === String(currentMediaMeta.fi.charAt(0)));
 		const authName = authObj ? authObj.name : "未知";
 		infoAuthorDom.textContent = "作者：" + authName;
-		const secObj = albumSections.find(s=>s.si === currentMediaMeta.fs);
+		const secObj = albumSections.find(s => s.si === currentMediaMeta.fs);
 		const secName = secObj ? secObj.ft : "未分类";
 		infoSectionDom.textContent = "段落：" + secName;
 		infoTimeDom.textContent = currentMediaMeta.ft || "";
 		infoNoteDom.textContent = currentMediaMeta.fm || "";
-	}else{
+	} else {
 		infoAuthorDom.textContent = "";
 		infoSectionDom.textContent = "";
 		infoTimeDom.textContent = "";
@@ -129,11 +148,16 @@ function openViewer(src, type, meta, idx) {
 	overlay.classList.add('show');
 	document.body.style.overflow = 'hidden';
 }
+
 function closeViewer() {
 	overlay.classList.remove('show');
 	document.body.style.overflow = '';
 	setTimeout(() => {
 		bigImg.src = '';
+		if (bigVid.hlsInstance) {
+			bigVid.hlsInstance.destroy();
+			bigVid.hlsInstance = null;
+		}
 		bigVid.pause();
 		bigVid.src = '';
 		currentMediaSrc = "";
@@ -145,17 +169,19 @@ function closeViewer() {
 		infoNoteDom.textContent = "";
 	}, 200);
 }
+
 closeBtn.addEventListener('click', closeViewer);
 overlay.addEventListener('click', e => {
 	if (e.target === overlay) closeViewer();
 });
-function prevMedia(){
-	if(currentIndex <= 0) return;
+
+function prevMedia() {
+	if (currentIndex <= 0) return;
 	const prev = mediaList[currentIndex - 1];
 	openViewer(prev.src, prev.type, prev.meta, currentIndex - 1);
 }
-function nextMedia(){
-	if(currentIndex >= mediaList.length - 1) return;
+function nextMedia() {
+	if (currentIndex >= mediaList.length - 1) return;
 	const next = mediaList[currentIndex + 1];
 	openViewer(next.src, next.type, next.meta, currentIndex + 1);
 }
@@ -167,6 +193,7 @@ document.addEventListener('keydown', e => {
 	if (e.key === 'ArrowLeft') prevMedia();
 	if (e.key === 'ArrowRight') nextMedia();
 });
+
 function getUrlParam(key) {
 	const params = new URLSearchParams(location.search);
 	return params.get(key);
@@ -183,22 +210,22 @@ Promise.all([
 	fetch('assets/meta/tag-data.json').then(res => res.json()),
 	fetch(`${albumSrc}/${albumId}/all-file.min.json`).then(res => res.json())
 ])
-.then(([albumAll, authorData, tagJson, fileData]) => {
-	albumBaseInfo = albumAll.albums.find(item => item.id === albumId);
-	if (!albumBaseInfo) throw new Error("目标相册不存在");
-	authorList = authorData.authors;
-	tagData = tagJson;
-	albumSections = fileData.sections || [];
-	albumFileData = fileData;
-	renderCover();
-	renderSideInfo();
-	renderSectionNav();
-	renderMediaContent();
-})
-.catch(err => {
-	console.error("页面加载失败：", err);
-	document.getElementById('contentBox').innerHTML = `<p style="text-align:center;padding:80px 0;color:var(--text-secondary)">相册数据读取异常，请检查文件路径</p>`;
-});
+	.then(([albumAll, authorData, tagJson, fileData]) => {
+		albumBaseInfo = albumAll.albums.find(item => item.id === albumId);
+		if (!albumBaseInfo) throw new Error("目标相册不存在");
+		authorList = authorData.authors;
+		tagData = tagJson;
+		albumSections = fileData.sections || [];
+		albumFileData = fileData;
+		renderCover();
+		renderSideInfo();
+		renderSectionNav();
+		renderMediaContent();
+	})
+	.catch(err => {
+		console.error("页面加载失败：", err);
+		document.getElementById('contentBox').innerHTML = `<p style="text-align:center;padding:80px 0;color:var(--text-secondary)">相册数据读取异常，请检查文件路径</p>`;
+	});
 function renderCover() {
 	const coverUrl = `assets/cover/${albumId}.webp`;
 	document.getElementById('albumCover').src = coverUrl;
@@ -212,7 +239,7 @@ function renderSideInfo() {
 	document.getElementById('mediaCount').innerText = `${albumBaseInfo.ph}张图片 · ${albumBaseInfo.vd}条视频`;
 	const tagBox = document.getElementById('tagBox');
 	tagBox.innerHTML = '';
-	if(tagData && tagData.tags && albumBaseInfo.ta){
+	if (tagData && tagData.tags && albumBaseInfo.ta) {
 		albumBaseInfo.ta.forEach(tagId => {
 			const tag = tagData.tags.find(t => t.id === tagId);
 			if (!tag) return;
@@ -272,18 +299,25 @@ function renderSingleBlock(secId, secTitle, fileList, boxDom) {
 		html += `<div class="media-group"><p class="author-subtitle">By:${authName}<div class="media-grid">`;
 		mediaListGroup.forEach(item => {
 			const preview = `${albumSrc}/${albumId}/pre/${item.fi}.webp`;
-			const original = `${albumSrc}/${albumId}/src/${item.fi}.${item.ff}`;
+			let original, mediaType;
+			if (item.ff === "mp4") {
+				original = `${albumSrc}/${albumId}/hls/${item.fi}.m3u8`;
+				mediaType = "m3u8";
+			} else {
+				original = `${albumSrc}/${albumId}/src/${item.fi}.${item.ff}`;
+				mediaType = item.ff;
+			}
 			const descHtml = item.fm ? `<p class="media-desc">${item.fm}</p>` : "";
 			const idx = mediaList.length;
-			mediaList.push({ src: original, type: item.ff, meta: item });
+			mediaList.push({ src: original, type: mediaType, meta: item });
 			if (item.ff === "mp4") {
-			    html += `<div class="media-card" data-idx="${idx}" data-src="${original}" data-type="mp4" data-meta='${JSON.stringify(item)}'>
+				html += `<div class="media-card" data-idx="${idx}" data-src="${original}" data-type="${mediaType}" data-meta='${JSON.stringify(item)}'>
 			        <video preload="none" poster="${preview}"></video>
 			        <span class="video-badge"></span>
 			        ${descHtml}
 			    </div>`;
 			} else {
-			    html += `<div class="media-card" data-idx="${idx}" data-src="${original}" data-type="webp" data-meta='${JSON.stringify(item)}'>
+				html += `<div class="media-card" data-idx="${idx}" data-src="${original}" data-type="${mediaType}" data-meta='${JSON.stringify(item)}'>
 			        <img src="${preview}" loading="lazy" alt="${item.fi}" onerror="this.parentElement.style.background:#111">
 			        ${descHtml}
 			    </div>`;
